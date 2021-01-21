@@ -83,7 +83,7 @@ void example_ckks_basics()
     evaluator.rescale_to_next_inplace(x1_encrypted_coeff2);
     cout << "    + Scale of 5*x after rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
 
- // Giati x^3?
+ // Why x^3 if our max power is x^2? 
     print_line(__LINE__);
     cout << "Compute, relinearize, and rescale (PI*x)*x^2." << endl;
     evaluator.multiply_inplace(x2_encrypted, x1_encrypted_coeff2);
@@ -91,7 +91,7 @@ void example_ckks_basics()
     cout << "    + Scale of PI*x^3 before rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
     evaluator.rescale_to_next_inplace(x2_encrypted);
     cout << "    + Scale of PI*x^3 after rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
-    
+ //
     print_line(__LINE__);
     cout << "Compute and rescale 3.2*x." << endl;
     evaluator.multiply_plain_inplace(x1_encrypted, plain_coeff1);
