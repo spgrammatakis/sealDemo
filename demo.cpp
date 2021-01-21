@@ -1,4 +1,5 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.// Licensed under the MIT license.
+ // Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license.
 #include "examples.h"
 
 using namespace std;
@@ -88,6 +89,7 @@ void example_ckks_basics()
     result to x3_encrypted, relinearize, and rescale. Note that again the scale
     is something close to 2^40, but not exactly 2^40 due to yet another scaling
     by a prime. We are down to the last level in the modulus switching chain.
+    */
 
     
     print_line(__LINE__);
@@ -97,8 +99,7 @@ void example_ckks_basics()
     cout << "    + Scale of PI*x^3 before rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
     evaluator.rescale_to_next_inplace(x2_encrypted);
     cout << "    + Scale of PI*x^3 after rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
-    */
-  
+    
     print_line(__LINE__);
     cout << "Compute and rescale 0.4*x." << endl;
     evaluator.multiply_plain_inplace(x1_encrypted, plain_coeff1);
@@ -143,7 +144,7 @@ void example_ckks_basics()
     evaluator.mod_switch_to_inplace(plain_coeff0, last_parms_id);
 
     print_line(__LINE__);
-    cout << "Compute 5.0*x^2 + 3.2*x + 2.0." << endl;
+    cout << "tCompute 5.0*x^2 + 3.2*x + 2.0." << endl;
     Ciphertext encrypted_result;
     evaluator.add(x2_encrypted, x1_encrypted, encrypted_result);
     evaluator.add_plain_inplace(encrypted_result, plain_coeff0);
@@ -156,7 +157,7 @@ void example_ckks_basics()
     for (size_t i = 0; i < input.size(); i++)
     {
         double x = input[i];
-        true_result.push_back((5 * x + 0.4) * x + 1);
+        true_result.push_back((5.0 * x + 3.2) * x + 2.0);
     }
     print_vector(true_result, 3, 7);
 
