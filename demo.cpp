@@ -93,11 +93,11 @@ void example_ckks_basics()
     cout << "    + Scale of PI*x^3 after rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
     
     print_line(__LINE__);
-    cout << "Compute and rescale 0.4*x." << endl;
+    cout << "Compute and rescale 3.2*x." << endl;
     evaluator.multiply_plain_inplace(x1_encrypted, plain_coeff1);
-    cout << "    + Scale of 0.4*x before rescale: " << log2(x1_encrypted.scale()) << " bits" << endl;
+    cout << "    + Scale of 3.2*x before rescale: " << log2(x1_encrypted.scale()) << " bits" << endl;
     evaluator.rescale_to_next_inplace(x1_encrypted);
-    cout << "    + Scale of 0.4*x after rescale: " << log2(x1_encrypted.scale()) << " bits" << endl;
+    cout << "    + Scale of 3.2*x after rescale: " << log2(x1_encrypted.scale()) << " bits" << endl;
 
     cout << endl;
     print_line(__LINE__);
