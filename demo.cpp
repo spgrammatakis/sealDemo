@@ -83,15 +83,7 @@ void example_ckks_basics()
     evaluator.rescale_to_next_inplace(x1_encrypted_coeff2);
     cout << "    + Scale of 5*x after rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
 
-    /*
-    Since x3_encrypted and x1_encrypted_coeff3 have the same exact scale and use
-    the same encryption parameters, we can multiply them together. We write the
-    result to x3_encrypted, relinearize, and rescale. Note that again the scale
-    is something close to 2^40, but not exactly 2^40 due to yet another scaling
-    by a prime. We are down to the last level in the modulus switching chain.
-    */
-
-    
+ // Giati x^3?
     print_line(__LINE__);
     cout << "Compute, relinearize, and rescale (PI*x)*x^2." << endl;
     evaluator.multiply_inplace(x2_encrypted, x1_encrypted_coeff2);
