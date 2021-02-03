@@ -81,15 +81,15 @@ void example_ckks_basics()
     evaluator.multiply_plain_inplace(x1_encrypted, plain_coeff2);
     evaluator.rescale_to_next_inplace(x1_encrypted);
 
-    Ciphertext x1_encrypted1;
-    encryptor.encrypt(x_plain, x1_encrypted1);
+    Ciphertext x1_encrypted_new;
+    encryptor.encrypt(x_plain, x1_encrypted_new);
     
     print_line(__LINE__);
     cout << "Compute and rescale 3.2*x." << endl;
-    evaluator.multiply_plain_inplace(x1_encrypted1, plain_coeff1);
-    cout << "    + Scale of 3.2*x before rescale: " << log2(x1_encrypted.scale()) << " bits" << endl;
-    evaluator.rescale_to_next_inplace(x1_encrypted1);
-    cout << "    + Scale of 3.2*x after rescale: " << log2(x1_encrypted.scale()) << " bits" << endl;
+    evaluator.multiply_plain_inplace(x1_encrypted_new, plain_coeff1);
+    cout << "    + Scale of 3.2*x before rescale: " << log2(x1_encrypted_new.scale()) << " bits" << endl;
+    evaluator.rescale_to_next_inplace(x1_encrypted_new);
+    cout << "    + Scale of 3.2*x after rescale: " << log2(x1_encrypted_new.scale()) << " bits" << endl;
 
     cout << endl;
     print_line(__LINE__);
@@ -148,7 +148,7 @@ void example_ckks_basics()
     decryptor.decrypt(encrypted_result, plain_result);
     vector<double> result;
     encoder.decode(plain_result, result);
-    cout << "    + Computed result ...... Numbers are off a bit." << endl;
+    cout << "    + Computed result ...... Numbers are off." << endl;
     print_vector(result, 3, 7);
 
 }
