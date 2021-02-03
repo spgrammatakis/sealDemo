@@ -1,4 +1,4 @@
- // Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 #include "examples.h"
 
@@ -82,16 +82,28 @@ void example_ckks_basics()
     cout << "    + Scale of 5*x before rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
     evaluator.rescale_to_next_inplace(x1_encrypted_coeff2);
     cout << "    + Scale of 5*x after rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
-
- // Why x^3 if our max power is x^2? 
-    print_line(__LINE__);
-    cout << "Compute, relinearize, and rescale (PI*x)*x^2." << endl;
-    evaluator.multiply_inplace(x2_encrypted, x1_encrypted_coeff2);
+    cout << " axne" <<endl;	
+ 	
+    evaluator.multiply_plain(x2_encrypted, plain_coeff2, x1_encrypted_coeff2);//edw einai to thema
+    cout << " meta multiplay" <<endl;
     evaluator.relinearize_inplace(x2_encrypted, relin_keys);
-    cout << "    + Scale of PI*x^3 before rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
-    evaluator.rescale_to_next_inplace(x2_encrypted);
-    cout << "    + Scale of PI*x^3 after rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
- //
+    cout << "    + Scale of 5*x before rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
+    evaluator.rescale_to_next_inplace(x1_encrypted_coeff2);
+    cout << "    + Scale of 5*x after rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
+
+// Why x^3 if our max power is x^2? 
+  /*
+    print_line(__LINE__);
+    cout << "Compute, relinearize, and rescale (5*x)*x^2." << endl;
+    cout << " axne" <<endl;
+    evaluator.multiply_inplace(x1_encrypted, x1_encrypted_coeff2);
+    cout << " axne" <<endl;
+    evaluator.relinearize_inplace(x1_encrypted, relin_keys);
+    cout << "    + Scale of 5*x^3 before rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
+    evaluator.rescale_to_next_inplace(x1_encrypted);
+    cout << "    + Scale of 5*x^3 after rescale: " << log2(x2_encrypted.scale()) << " bits" << endl;
+  */
+//
     print_line(__LINE__);
     cout << "Compute and rescale 3.2*x." << endl;
     evaluator.multiply_plain_inplace(x1_encrypted, plain_coeff1);
@@ -149,14 +161,14 @@ void example_ckks_basics()
     for (size_t i = 0; i < input.size(); i++)
     {
         double x = input[i];
-        true_result.push_back((5.0 * x + 3.2) * x + 2.0);
+        true_result.push_back((5.0 * x+ 3.2 )* x + 2.0);
     }
     print_vector(true_result, 3, 7);
 
     decryptor.decrypt(encrypted_result, plain_result);
     vector<double> result;
     encoder.decode(plain_result, result);
-    cout << "    + Computed result ...... Correct." << endl;
+    cout << "    + Computed result ...... Numbers are off a bit." << endl;
     print_vector(result, 3, 7);
 
 }
