@@ -126,14 +126,12 @@ void example_ckks_basics()
     print_line(__LINE__);
     cout << "Normalize encryption parameters to the lowest level." << endl;
     parms_id_type last_parms_id = x2_encrypted.parms_id();
-    cout << "a" <<endl;
     evaluator.mod_switch_to_inplace(x1_encrypted, last_parms_id);
-    cout << "b" <<endl;
     evaluator.mod_switch_to_inplace(x1_encrypted_new, last_parms_id);
     evaluator.mod_switch_to_inplace(plain_coeff0, last_parms_id);
 
     print_line(__LINE__);
-    cout << "tCompute 5.0*x^2 + 3.2*x + 2.0." << endl;
+    cout << "Compute 5.0*x^2 + 3.2*x + 2.0." << endl;
     Ciphertext encrypted_result;
     evaluator.add(x2_encrypted, x1_encrypted_new, encrypted_result);
     evaluator.add(x1_encrypted_new, x1_encrypted, encrypted_result);
