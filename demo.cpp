@@ -78,25 +78,18 @@ void example_ckks_basics()
     print_line(__LINE__);
     cout << "Compute and rescale 5*x." << endl;
     Ciphertext x1_encrypted_coeff2;
-    evaluator.multiply_plain(x1_encrypted, plain_coeff2, x1_encrypted_coeff2);
-    cout << "    + Scale of 5*x before rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
-    evaluator.rescale_to_next_inplace(x1_encrypted_coeff2);
-    cout << "    + Scale of 5*x after rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
-    cout << " axne" <<endl;	
- 	
-    evaluator.multiply_plain(x2_encrypted, plain_coeff2, x1_encrypted_coeff2);//edw einai to thema
-    cout << " meta multiplay" <<endl;
-    evaluator.relinearize_inplace(x2_encrypted, relin_keys);
-    cout << "    + Scale of 5*x before rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
-    evaluator.rescale_to_next_inplace(x1_encrypted_coeff2);
-    cout << "    + Scale of 5*x after rescale: " << log2(x1_encrypted_coeff2.scale()) << " bits" << endl;
+    evaluator.multiply_plain_inplace(x1_encrypted, plain_coeff2);
+    evaluator.rescale_to_next_inplace(x1_encrypted);
+
+    Ciphertext x1_encrypted_new;
+    encryptor.encrypt(x_plain, x1_encrypted_new);
     
     print_line(__LINE__);
     cout << "Compute and rescale 3.2*x." << endl;
-    evaluator.multiply_plain_inplace(x1_encrypted, plain_coeff1);
-    cout << "    + Scale of 3.2*x before rescale: " << log2(x1_encrypted.scale()) << " bits" << endl;
-    evaluator.rescale_to_next_inplace(x1_encrypted);
-    cout << "    + Scale of 3.2*x after rescale: " << log2(x1_encrypted.scale()) << " bits" << endl;
+    evaluator.multiply_plain_inplace(x1_encrypted_new,plain_coeff1);
+    cout << "    + Scale of 3.2*x before rescale: " << log2(x1_encrypted_new.scale()) << " bits" << endl;
+    evaluator.rescale_to_next_inplace(x1_encrypted_new);
+    cout << "    + Scale of 3.2*x after rescale: " << log2(x1_encrypted_new.scale()) << " bits" << endl;
 
     cout << endl;
     print_line(__LINE__);
@@ -117,6 +110,7 @@ void example_ckks_basics()
     cout << fixed << setprecision(10);
     cout << "    + Exact scale in 5*x^2: " << x2_encrypted.scale() << endl;
     cout << "    + Exact scale in  0.4*x: " << x1_encrypted.scale() << endl;
+    cout << "    + Exact scale in  0.4*x: " << x1_encrypted_new.scale() << endl;
     cout << "    + Exact scale in      1: " << plain_coeff0.scale() << endl;
     cout << endl;
     cout.copyfmt(old_fmt);
@@ -126,18 +120,23 @@ void example_ckks_basics()
     cout << "Normalize scales to 2^40." << endl;
     x2_encrypted.scale() = pow(2.0, 40);
     x1_encrypted.scale() = pow(2.0, 40);
+    x1_encrypted_new.scale() = pow(2.0, 40);
 
    
     print_line(__LINE__);
     cout << "Normalize encryption parameters to the lowest level." << endl;
     parms_id_type last_parms_id = x2_encrypted.parms_id();
+    cout << "a" <<endl;
     evaluator.mod_switch_to_inplace(x1_encrypted, last_parms_id);
+    cout << "b" <<endl;
+    evaluator.mod_switch_to_inplace(x1_encrypted_new, last_parms_id);
     evaluator.mod_switch_to_inplace(plain_coeff0, last_parms_id);
 
     print_line(__LINE__);
     cout << "tCompute 5.0*x^2 + 3.2*x + 2.0." << endl;
     Ciphertext encrypted_result;
-    evaluator.add(x2_encrypted, x1_encrypted, encrypted_result);
+    evaluator.add(x2_encrypted, x1_encrypted_new, encrypted_result);
+    evaluator.add(x1_encrypted_new, x1_encrypted, encrypted_result);
     evaluator.add_plain_inplace(encrypted_result, plain_coeff0);
 
     Plaintext plain_result;
@@ -148,14 +147,14 @@ void example_ckks_basics()
     for (size_t i = 0; i < input.size(); i++)
     {
         double x = input[i];
-        true_result.push_back((5.0 * x+ 3.2 )* x + 2.0);
+        true_result.push_back((5.0 + 3.2 )* x + 2.0);
     }
     print_vector(true_result, 3, 7);
 
     decryptor.decrypt(encrypted_result, plain_result);
     vector<double> result;
     encoder.decode(plain_result, result);
-    cout << "    + Computed result ...... Numbers are off a bit." << endl;
+    cout << "    + Computed result ...... Numbers are off." << endl;
     print_vector(result, 3, 7);
 
 }
