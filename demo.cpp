@@ -152,7 +152,7 @@ void example_ckks_basics()
     decryptor.decrypt(encrypted_result, plain_result);
     vector<double> result;
     encoder.decode(plain_result, result);
-    cout << "    + Computed result ...... Numbers are off." << endl;
+    cout << "    + Computed result ...... Numbers are ok?." << endl;
     print_vector(result, 3, 7);
 
 }
