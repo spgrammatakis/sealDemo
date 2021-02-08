@@ -110,7 +110,6 @@ void example_ckks_basics()
     cout << fixed << setprecision(10);
     cout << "    + Exact scale in 5*x^2: " << x2_encrypted.scale() << endl;
     cout << "    + Exact scale in  0.4*x: " << x1_encrypted.scale() << endl;
-    cout << "    + Exact scale in  0.4*x: " << x1_encrypted_new.scale() << endl;
     cout << "    + Exact scale in      1: " << plain_coeff0.scale() << endl;
     cout << endl;
     cout.copyfmt(old_fmt);
@@ -134,7 +133,7 @@ void example_ckks_basics()
     cout << "Compute 5.0*x^2 + 3.2*x + 2.0." << endl;
     Ciphertext encrypted_result;
     evaluator.add(x2_encrypted, x1_encrypted_new, encrypted_result);
-    evaluator.add(x1_encrypted_new, x1_encrypted, encrypted_result);
+    evaluator.add(x1_encrypted, x1_encrypted_new, encrypted_result);
     evaluator.add_plain_inplace(encrypted_result, plain_coeff0);
 
     Plaintext plain_result;
@@ -145,7 +144,7 @@ void example_ckks_basics()
     for (size_t i = 0; i < input.size(); i++)
     {
         double x = input[i];
-        true_result.push_back((5.0 + 3.2 )* x + 2.0);
+        true_result.push_back((5.0 * x + 3.2 )* x + 2.0);
     }
     print_vector(true_result, 3, 7);
 
